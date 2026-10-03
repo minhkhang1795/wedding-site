@@ -213,6 +213,6 @@ const begin=()=>{
 if(photo.complete&&photo.naturalWidth){(photo.decode?photo.decode().catch(()=>{}):Promise.resolve()).then(begin)}
 else{photo.addEventListener('load',()=> (photo.decode?photo.decode().catch(()=>{}):Promise.resolve()).then(begin),{once:true});photo.addEventListener('error',begin,{once:true});}
 })();
-const nav=$('nav');addEventListener('scroll',()=>nav.classList.toggle('show',scrollY>document.getElementById('hero').offsetHeight-window.innerHeight*.6),{passive:true});
+const pageNav=$('nav');addEventListener('scroll',()=>pageNav.classList.toggle('show',scrollY>document.getElementById('hero').offsetHeight-window.innerHeight*.6),{passive:true});
 addEventListener('scroll',()=>{$('prog').style.transform='scaleX('+scrollY/(document.documentElement.scrollHeight-innerHeight)+')'},{passive:true});
 </script></body></html>
