@@ -70,7 +70,7 @@ body{font-weight:300}h1,h2,h3{letter-spacing:-.02em}.script{font-family:'Cormora
 .timeline{position:relative;border-left:0;--tl:0}.timeline:before,.timeline:after{content:"";position:absolute;left:0;top:0;bottom:0;width:1px}.timeline:before{background:var(--line)}.timeline:after{background:var(--sage);transform:scaleY(var(--tl));transform-origin:top;transition:transform .35s ease}.timeline>div{opacity:.58;transform:translateY(12px);transition:opacity .45s ease,transform .45s ease}.timeline>div.on{opacity:1;transform:none}.timeline div:before{background:var(--ivory);border-color:var(--sage);transition:background .35s ease,box-shadow .35s ease}.timeline div.on:before{background:var(--sage);box-shadow:0 0 0 4px #345e5722}
 
 /* Deep-teal curtain reveal, approved in preview. */
-.curtain-overlay{position:fixed;inset:0;z-index:100;overflow:hidden;pointer-events:none;background:transparent;--curtain-time:5s}
+.curtain-overlay{position:fixed;inset:0;z-index:100;overflow:hidden;pointer-events:none;background:transparent;--curtain-time:5s;animation:curtain-auto-hide 6s ease 5.2s forwards}
 .curtain-overlay .wing{position:absolute;top:0;bottom:-1px;width:54%;overflow:hidden;will-change:transform;filter:drop-shadow(0 3px 10px #061f1c88)}
 .curtain-left{left:0;transform-origin:left center;background:linear-gradient(90deg,#0c302d 0%,#1e554f 7%,#0a302d 14%,#31665e 22%,#0b322e 31%,#285e57 39%,#092d2a 47%,#235650 57%,#0a302d 68%,#326961 78%,#0b302d 88%,#1c4b46 96%,#082724 100%)}
 .curtain-right{right:0;transform-origin:right center;background:linear-gradient(90deg,#082724 0%,#1c4b46 7%,#0b302d 14%,#326961 24%,#0a302d 34%,#235650 43%,#092d2a 53%,#285e57 62%,#0b322e 70%,#31665e 79%,#0a302d 88%,#1e554f 96%,#0c302d 100%)}
@@ -79,7 +79,8 @@ body{font-weight:300}h1,h2,h3{letter-spacing:-.02em}.script{font-family:'Cormora
 .curtain-valance{position:absolute;z-index:3;left:-2%;right:-2%;top:-1px;height:13vh;min-height:72px;background:linear-gradient(180deg,#092522 0%,#17443f 64%,#0a302d 68%,#9b7440 71%,#d7b477 74%,#6b4e2e 78%,transparent 82%);border-radius:0 0 48% 48%/0 0 18% 18%;box-shadow:0 10px 16px #04191770}
 .curtain-tie{position:absolute;z-index:2;top:54%;width:4px;height:12vh;background:linear-gradient(90deg,#49321a,#f1d394,#6c4b25);border-radius:50%;opacity:0;box-shadow:0 0 8px #d5b36a}
 .curtain-tie.left{left:3.4%}.curtain-tie.right{right:3.4%}
-.curtain-overlay.opening .curtain-left{animation:curtain-draw-left var(--curtain-time) cubic-bezier(.65,0,.25,1) both}.curtain-overlay.opening .curtain-right{animation:curtain-draw-right var(--curtain-time) cubic-bezier(.65,0,.25,1) both}.curtain-overlay.opening .curtain-tie{animation:curtain-tie-in var(--curtain-time) ease both}
+.curtain-overlay .curtain-left{animation:curtain-draw-left var(--curtain-time) cubic-bezier(.65,0,.25,1) both}.curtain-overlay .curtain-right{animation:curtain-draw-right var(--curtain-time) cubic-bezier(.65,0,.25,1) both}.curtain-overlay .curtain-tie{animation:curtain-tie-in var(--curtain-time) ease both}
+@keyframes curtain-auto-hide{0%,99%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
 @keyframes curtain-draw-left{0%{transform:scaleX(1) translateX(0)}48%{transform:scaleX(.62) translateX(-15%)}72%{transform:scaleX(.28) translateX(-50%)}100%{transform:scaleX(.16) translateX(-100%)}}
 @keyframes curtain-draw-right{0%{transform:scaleX(1) translateX(0)}48%{transform:scaleX(.62) translateX(15%)}72%{transform:scaleX(.28) translateX(50%)}100%{transform:scaleX(.16) translateX(100%)}}
 @keyframes curtain-tie-in{0%,52%{opacity:0;transform:scaleY(.1)}68%,100%{opacity:.92;transform:scaleY(1)}}
@@ -208,9 +209,18 @@ $('step2').addEventListener('submit',e=>{e.preventDefault();$('err').hidden=true
 // Approved curtain entrance and restrained evergreen fall. RSVP handlers above are unchanged.
 (function(){
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const curtain=$('curtain'),photo=$('heroPhoto');
-if(!reduced&&curtain){const begin=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{curtain.classList.add('opening');const panel=curtain.querySelector('.curtain-left');panel.addEventListener('animationend',e=>{if(e.target===panel)curtain.remove()},{once:true});setTimeout(()=>curtain.remove(),5600)}));
-if(photo.complete&&photo.naturalWidth){(photo.decode?photo.decode().catch(()=>{}):Promise.resolve()).then(begin)}else{photo.addEventListener('load',()=> (photo.decode?photo.decode().catch(()=>{}):Promise.resolve()).then(begin),{once:true});photo.addEventListener('error',begin,{once:true})}}
+const curtain=$('curtain');let curtainStarted=false;
+function startCurtain(){if(reduced||!curtain||curtainStarted)return;curtainStarted=true;
+ // CSS starts the animation without waiting for JS. Keep a JS watchdog as a second exit path.
+ const panel=curtain.querySelector('.curtain-left');
+ panel.addEventListener('animationend',e=>{if(e.target===panel)curtain.remove()},{once:true});
+ setTimeout(()=>{if(curtain.isConnected)curtain.remove()},6500);
+}
+if(!reduced&&curtain){
+ startCurtain();addEventListener('pageshow',startCurtain,{once:true});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)startCurtain()});
+ curtain.addEventListener('pointerdown',startCurtain,{once:true});curtain.addEventListener('touchstart',startCurtain,{once:true,passive:true});
+}
 if(!reduced){const layer=$('pinefall');const needle='<svg viewBox="0 0 24 30" aria-hidden="true"><path d="M12 28 4 18l7 3-6-8 7 3-4-8 4 4 1-9 2 9 5-5-3 9 5-3-6 8 6-2-8 9Z" fill="currentColor"/><path d="M12 28V5" stroke="#f7f4ed" stroke-opacity=".7" stroke-width=".8"/></svg>';const cone='<svg viewBox="0 0 20 28" aria-hidden="true"><path d="M10 1C5 5 3 10 3 16c0 6 3 10 7 11 4-1 7-5 7-11 0-6-2-11-7-15Z" fill="currentColor"/><path d="M6 8l8 2M4 13l12 2M5 18l10 2M8 23l5 1" fill="none" stroke="#f7f4ed" stroke-width="1" stroke-opacity=".8"/><path d="M10 1 8 5" stroke="#345e57" stroke-width="1.3"/></svg>';for(let i=0;i<8;i++){const item=document.createElement('span');const isCone=i%3===0;item.className='pinefall-item '+(isCone?'cone':'needle');item.innerHTML=isCone?cone:needle;item.style.left=(6+Math.random()*88)+'%';item.style.animationDuration=(20+Math.random()*14)+'s';item.style.animationDelay=(-Math.random()*30)+'s';item.style.transform='rotate('+(Math.random()*360)+'deg)';layer.appendChild(item)}}
 const clamp=v=>Math.max(0,Math.min(1,v));let queued=false;function timelineFrame(){queued=false;const el=$('timeline');if(!el)return;const box=el.getBoundingClientRect();el.style.setProperty('--tl',clamp((innerHeight*.72-box.top)/Math.max(1,box.height)));document.querySelectorAll('#timeline>div').forEach(node=>node.classList.toggle('on',node.getBoundingClientRect().top<innerHeight*.78))}addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(timelineFrame)}},{passive:true});addEventListener('resize',timelineFrame);timelineFrame();
 })();
