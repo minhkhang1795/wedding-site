@@ -52,42 +52,44 @@ input:focus,select:focus,textarea:focus{border-color:var(--rose)}
 footer{padding:3rem 1.5rem 4rem;text-align:center;background:var(--blush)}footer .script{font-size:2.4rem}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.hero>*,.reveal{opacity:1!important;transform:none!important}}
 </style></head><body>
-<nav id="nav"><a data-to="story">Us</a><a data-to="details">Details</a><a data-to="venue">Venue</a><a data-to="rsvp">RSVP</a></nav>
+<nav id="nav"><a data-to="story" id="navStory"></a><a data-to="details" id="navDetails"></a><a data-to="venue" id="navVenue"></a><a data-to="rsvp" id="navRsvp"></a></nav>
 <header class="hero">
- <p class="script">Together with their families</p>
+ <p class="script" id="heroTagline"></p>
  <h1 id="names"></h1>
  <p class="date" id="date"></p>
  <p class="place" id="place"></p>
- <button class="btn" data-to="rsvp">RSVP</button>
+ <button class="btn" data-to="rsvp" id="heroButton"></button>
  <svg class="hills" viewBox="0 0 800 150" preserveAspectRatio="none"><path d="M0 110 Q120 60 240 100 T480 90 T800 100 V150 H0Z" fill="#dfe6da"/><path d="M0 130 Q150 90 300 125 T600 120 T800 125 V150 H0Z" fill="#c9d4c3"/>
  <g fill="#9aab94"><path d="M60 125l10-45 10 45zM90 128l8-35 8 35zM700 124l10-48 10 48zM735 126l9-38 9 38zM400 122l7-30 7 30z"/></g></svg>
 </header>
-<section id="story" class="reveal"><p class="eyebrow">Save the date</p><h2 id="headline"></h2><div class="orn">&#10084;</div><p id="intro"></p>
+<section id="story" class="reveal"><p class="eyebrow" id="storyEyebrow"></p><h2 id="headline"></h2><div class="orn">&#10084;</div><p id="intro"></p>
  <div class="count" id="count"></div></section>
-<div class="band"><section id="details" class="reveal"><p class="eyebrow">The celebration</p><h2>Details</h2>
+<div class="band"><section id="details" class="reveal"><p class="eyebrow" id="detailsEyebrow"></p><h2 id="detailsTitle"></h2>
  <div class="cards" id="cards"></div>
  <div class="timeline" id="timeline"></div></section></div>
-<section id="venue" class="reveal"><p class="eyebrow">Where</p><h2 id="vname"></h2><div class="orn">&#10049;</div>
- <p id="vtext"></p><p><a class="link" id="map" target="_blank" rel="noopener">View on Google Maps</a></p>
+<section id="venue" class="reveal"><p class="eyebrow" id="venueEyebrow"></p><h2 id="vname"></h2><div class="orn">&#10049;</div>
+ <p id="vtext"></p><p><a class="link" id="map" target="_blank" rel="noopener"></a></p>
  <div class="cards" id="travel"></div></section>
-<section id="rsvp" class="rsvp reveal"><p class="eyebrow">Kindly reply</p><h2>RSVP</h2>
+<section id="rsvp" class="rsvp reveal"><p class="eyebrow" id="rsvpEyebrow"></p><h2 id="rsvpTitle"></h2>
  <div class="panel">
-  <div id="step1" class="step"><label for="q" style="margin-top:0">Search your name</label>
-   <input id="q" type="search" autocomplete="off" placeholder="Type your first or last name">
+  <div id="step1" class="step"><label for="q" id="searchLabel" style="margin-top:0"></label>
+   <input id="q" type="search" autocomplete="off">
    <ul id="results"></ul><p id="none" class="small" hidden></p></div>
   <form id="step2" class="step" hidden>
-   <p style="font:400 1.6rem 'Cormorant Garamond',serif;margin:0">Welcome, <span id="who"></span></p>
-   <p class="small" id="already" hidden>You already replied. Submitting again will update your answer.</p>
-   <div class="choice" style="margin-top:1rem"><label><input type="radio" name="att" value="yes" checked> Joyfully accepts</label><label><input type="radio" name="att" value="no"> Regretfully declines</label></div>
-   <div id="cntwrap"><label for="cnt">Guests attending (including you)</label><select id="cnt"></select></div>
-   <label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com">
-   <label for="notes">Dietary needs or a note (optional)</label><textarea id="notes" rows="3"></textarea>
-   <div style="text-align:center"><button class="btn fill" type="submit" id="send">Send RSVP</button><br><button type="button" class="linkbtn small" id="back">Not you? Search again</button></div>
+   <p style="font:400 1.6rem 'Cormorant Garamond',serif;margin:0"><span id="welcomePrefix"></span> <span id="who"></span></p>
+   <p class="small" id="already" hidden></p>
+   <div class="choice" style="margin-top:1rem"><label><input type="radio" name="att" value="yes" checked> <span id="acceptText"></span></label><label><input type="radio" name="att" value="no"> <span id="declineText"></span></label></div>
+   <div id="cntwrap"><label for="cnt" id="countLabel"></label><select id="cnt"></select></div>
+   <label for="email" id="emailLabel"></label><input id="email" type="email" required>
+   <label for="notes" id="notesLabel"></label><textarea id="notes" rows="3"></textarea>
+   <div style="text-align:center"><button class="btn fill" type="submit" id="send"></button><br><button type="button" class="linkbtn small" id="back"></button></div>
    <p class="err" id="err" hidden></p></form>
-  <div id="done" class="step done" hidden><h3>Thank you</h3><p>Your RSVP is in. We'll email you the details soon.</p></div>
+  <div id="done" class="step done" hidden><h3 id="thanksTitle"></h3><p id="thanksText"></p></div>
  </div></section>
 <footer><p class="script" id="fnames"></p><p class="small" id="contact"></p></footer>
 <script>
+// EDIT THIS CONFIG BLOCK to change the wedding details or any text shown on the site.
+// Keep the API URL as-is unless the Apps Script deployment URL changes.
 window.WEDDING={
  apiUrl:"https://script.google.com/macros/s/AKfycbxiy6zhKInn70xzM6M52AmYpQTrusa5lkmekYNRXVZiiMkWH3vZ8o8x7EJg3uUCIhsd/exec",
  names:["Alex","Jordan"],
@@ -101,9 +103,27 @@ window.WEDDING={
  venueText:"Le Lai Street, Ward 5, Dalat, Lam Dong, Vietnam. A heritage villa resort beneath the pine hills.",
  mapUrl:"https://www.google.com/maps/search/?api=1&query=Ana+Mandara+Villas+Dalat+Resort+%26+Spa",
  travel:[["Getting there","Fly into Lien Khuong Airport (DLI) or take the road from Ho Chi Minh City."],["Where to stay","Rooms are at the villas. More details will follow by email once you RSVP."]],
- contact:"Questions? Email us at you@example.com"
+ contact:"Questions? Email us at you@example.com",
+ text:{
+  navStory:"Us", navDetails:"Details", navVenue:"Venue", navRsvp:"RSVP",
+  heroTagline:"Together with their families", heroButton:"RSVP",
+  storyEyebrow:"Save the date", detailsEyebrow:"The celebration", detailsTitle:"Details",
+  venueEyebrow:"Where", mapLink:"View on Google Maps",
+  rsvpEyebrow:"Kindly reply", rsvpTitle:"RSVP", searchLabel:"Search your name",
+  searchPlaceholder:"Type your first or last name", noMatch:"No match. Try just your first or last name, or contact us below.",
+  serverError:"Could not reach the server. Please try again.", welcomePrefix:"Welcome,",
+  already:"You already replied. Submitting again will update your answer.",
+  acceptText:"Joyfully accepts", declineText:"Regretfully declines",
+  countLabel:"Guests attending (including you)", emailLabel:"Email address", emailPlaceholder:"you@example.com",
+  notesLabel:"Dietary needs or a note (optional)", send:"Send RSVP", back:"Not you? Search again",
+  thanksTitle:"Thank you", thanksText:"Your RSVP is in. We'll email you the details soon.",
+  genericError:"Something went wrong: ", countUnits:["Days","Hours","Minutes","Seconds"]
+ }
 };
 const C=window.WEDDING,$=id=>document.getElementById(id);let sel=null,timer;
+const T=C.text;
+for(const id of ["navStory","navDetails","navVenue","navRsvp","heroTagline","heroButton","storyEyebrow","detailsEyebrow","detailsTitle","venueEyebrow","rsvpEyebrow","rsvpTitle","searchLabel","welcomePrefix","acceptText","declineText","countLabel","emailLabel","notesLabel","send","back","thanksTitle","thanksText"]){$(id).textContent=T[id]}
+$('already').textContent=T.already;$('map').textContent=T.mapLink;$('q').placeholder=T.searchPlaceholder;$('email').placeholder=T.emailPlaceholder;
 document.title=C.names.join(" & ")+" - Wedding";
 $('names').innerHTML=C.names[0]+'<i>&amp;</i>'+C.names[1];$('fnames').textContent=C.names.join(" & ");
 $('date').textContent=C.dateLine;$('place').textContent=C.venue+" · "+C.place;$('headline').textContent=C.headline;$('intro').textContent=C.intro;
@@ -112,7 +132,7 @@ $('cards').innerHTML=C.events.map(e=>'<div class="card"><span class="eyebrow">'+
 $('timeline').innerHTML=C.timeline.map(t=>'<div><b>'+t[0]+'</b>'+t[1]+'</div>').join('');
 $('travel').innerHTML=C.travel.map(e=>'<div class="card"><h3>'+e[0]+'</h3><p>'+e[1]+'</p></div>').join('');
 function tick(){const d=new Date(C.dateISO)-new Date();if(d<0){$('count').innerHTML='';return}
- const v=[[Math.floor(d/864e5),'Days'],[Math.floor(d/36e5)%24,'Hours'],[Math.floor(d/6e4)%60,'Minutes'],[Math.floor(d/1e3)%60,'Seconds']];
+ const v=[[Math.floor(d/864e5),T.countUnits[0]],[Math.floor(d/36e5)%24,T.countUnits[1]],[Math.floor(d/6e4)%60,T.countUnits[2]],[Math.floor(d/1e3)%60,T.countUnits[3]]];
  $('count').innerHTML=v.map(x=>'<div><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('')}
 tick();setInterval(tick,1000);
 document.querySelectorAll('[data-to]').forEach(a=>a.onclick=()=>$(a.dataset.to).scrollIntoView({behavior:'smooth'}));
@@ -123,15 +143,15 @@ $('q').addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(search
 const API=window.WEDDING.apiUrl;
 function search(){const q=$('q').value.trim();$('none').hidden=true;$('results').innerHTML='';if(q.length<2)return;
  fetch(API+'?action=search&q='+encodeURIComponent(q)).then(r=>r.json()).then(r=>{$('results').innerHTML='';r.results.forEach(g=>{const li=document.createElement('li');li.textContent=g.name;li.onclick=()=>pick(g);$('results').appendChild(li)});
-  $('none').textContent='No match. Try just your first or last name, or contact us below.';$('none').hidden=r.results.length>0})
- .catch(()=>{$('none').textContent='Could not reach the server. Please try again.';$('none').hidden=false})}
+  $('none').textContent=T.noMatch;$('none').hidden=r.results.length>0})
+ .catch(()=>{$('none').textContent=T.serverError;$('none').hidden=false})}
 function show(id){['step1','step2','done'].forEach(s=>$(s).hidden=s!==id)}
 function pick(g){sel=g;show('step2');$('who').textContent=g.name;$('already').hidden=!g.responded;
  $('cnt').innerHTML=Array.from({length:g.max},(_,i)=>'<option>'+(i+1)+'</option>').join('');$('cnt').value=g.max;$('cntwrap').hidden=false}
 document.querySelectorAll('[name=att]').forEach(r=>r.onchange=()=>{$('cntwrap').hidden=document.querySelector('[name=att]:checked').value==='no'});
 $('back').onclick=()=>show('step1');
 $('step2').addEventListener('submit',e=>{e.preventDefault();$('err').hidden=true;$('send').disabled=true;
- const fail=m=>{$('err').textContent='Something went wrong: '+m;$('err').hidden=false;$('send').disabled=false};
+ const fail=m=>{$('err').textContent=T.genericError+m;$('err').hidden=false;$('send').disabled=false};
  fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({id:sel.id,name:sel.name,attending:document.querySelector('[name=att]:checked').value,count:$('cnt').value,email:$('email').value,notes:$('notes').value})})
  .then(r=>r.json()).then(r=>{if(!r.ok)return fail(r.error);show('done')}).catch(x=>fail(x.message||x))});
 </script></body></html>
