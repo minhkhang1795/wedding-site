@@ -123,8 +123,8 @@ nav a{position:relative;padding-bottom:3px;transition:color .3s}nav a:after{cont
   <circle cx="150" cy="108" r="26"/><path d="M112 180Q150 160 188 180L196 332H104Z"/><path d="M150 166L132 206L150 252L168 206Z"/><path d="M122 332L124 488H148L150 346L152 488H176L178 332"/><path d="M188 186Q206 250 202 306"/><path d="M112 186Q100 250 106 310"/>
   <circle cx="256" cy="116" r="23"/><path d="M243 96Q256 78 270 96"/><path d="M233 100Q214 200 222 340"/><path d="M238 170Q256 160 274 170L266 250"/><path d="M238 250Q216 380 204 488H312Q296 380 266 250"/><path d="M238 176Q214 250 202 306"/><path d="M274 176Q290 230 280 280"/><circle cx="203" cy="322" r="9"/><path d="M203 331V352M60 489H350"/>
  </svg>
- <div class="pines pL" id="pL"><svg id="svgL" viewBox="0 0 600 1000" preserveAspectRatio="xMidYMax slice"></svg></div>
- <div class="pines pR" id="pR"><svg id="svgR" viewBox="0 0 600 1000" preserveAspectRatio="xMidYMax slice"></svg></div>
+ <div class="pines pL" id="pL"><svg id="svgL" viewBox="0 0 600 1000" preserveAspectRatio="none"></svg></div>
+ <div class="pines pR" id="pR"><svg id="svgR" viewBox="0 0 600 1000" preserveAspectRatio="none"></svg></div>
  <div class="t1"><p class="script" id="heroTagline"></p><h1 id="names"></h1></div>
  <div class="t2" id="t2"><p class="date" id="date"></p><p class="place" id="place"></p><button class="btn" data-to="rsvp" id="heroButton"></button></div>
  <div class="cue" id="cue">Scroll</div>
@@ -134,7 +134,7 @@ nav a{position:relative;padding-bottom:3px;transition:color .3s}nav a:after{cont
 <div class="band"><section id="details" class="reveal"><svg class="sect-flora" viewBox="0 0 90 40"><path d="M4 20H34M56 20H86"/><path d="M45 6L37 20H53ZM45 14L33 30H57ZM45 22V36"/></svg><p class="eyebrow" id="detailsEyebrow"></p><h2 id="detailsTitle"></h2>
  <div class="cards" id="cards"></div>
  <div class="timeline" id="timeline"></div></section></div>
-<section id="venue" class="reveal"><div class="venuebg" id="vbg"><svg id="vsvg" viewBox="0 0 600 300" preserveAspectRatio="xMidYMax slice"></svg><div class="mist a" data-m=".25"></div><div class="mist b" data-m="-.35"></div></div><svg class="sect-flora" viewBox="0 0 90 40"><path d="M4 20H34M56 20H86"/><path d="M45 6L37 20H53ZM45 14L33 30H57ZM45 22V36"/></svg><p class="eyebrow" id="venueEyebrow"></p><h2 id="vname"></h2><div class="orn">&#10049;</div>
+<section id="venue" class="reveal"><div class="venuebg" id="vbg"><svg id="vsvg" viewBox="0 0 600 260" preserveAspectRatio="none"></svg><div class="mist a" data-m=".25"></div><div class="mist b" data-m="-.35"></div></div><svg class="sect-flora" viewBox="0 0 90 40"><path d="M4 20H34M56 20H86"/><path d="M45 6L37 20H53ZM45 14L33 30H57ZM45 22V36"/></svg><p class="eyebrow" id="venueEyebrow"></p><h2 id="vname"></h2><div class="orn">&#10049;</div>
  <p id="vtext"></p><p><a class="link" id="map" target="_blank" rel="noopener"></a></p>
  <div class="cards" id="travel"></div></section>
 <section id="rsvp" class="rsvp reveal"><svg class="sect-flora" viewBox="0 0 90 40"><path d="M4 20H34M56 20H86"/><path d="M45 6L37 20H53ZM45 14L33 30H57ZM45 22V36"/></svg><p class="eyebrow" id="rsvpEyebrow"></p><h2 id="rsvpTitle"></h2>
@@ -227,17 +227,19 @@ $('step2').addEventListener('submit',e=>{e.preventDefault();$('err').hidden=true
 (function(){
  const rm=matchMedia('(prefers-reduced-motion:reduce)').matches,NS='http://www.w3.org/2000/svg';
  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
- function trees(svg,n,top,minH,maxH,palette,amberChance){
-  const items=[];for(let i=0;i<n;i++){const h=minH+rnd()*(maxH-minH),base=top+rnd()*120;items.push({x:rnd()*600,h,base,c:palette[Math.floor(rnd()*palette.length)],am:rnd()<amberChance})}
+ function trees(svg,W,H,n,top,minH,maxH,palette,amberChance){
+  seed=7;svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  const items=[];for(let i=0;i<n;i++){const h=H*(minH+rnd()*(maxH-minH)),base=H*(top+rnd()*.14);items.push({x:rnd()*W,h,base,c:palette[Math.floor(rnd()*palette.length)],am:rnd()<amberChance,c2:rnd()<.5})}
   items.sort((a,b)=>a.base-b.base);let out='';
-  for(const t of items){const w=t.h*.36,x=t.x,b=t.base;
-   if(t.am){const c=Math.random()<.5?'#c9782b':'#a8481f';out+='<rect x="'+(x-4)+'" y="'+(b-t.h*.4)+'" width="8" height="'+t.h*.4+'" fill="#4a2f20"/><circle cx="'+x+'" cy="'+(b-t.h*.5)+'" r="'+w*.55+'" fill="'+c+'"/><circle cx="'+(x-w*.3)+'" cy="'+(b-t.h*.4)+'" r="'+w*.38+'" fill="'+c+'"/><circle cx="'+(x+w*.3)+'" cy="'+(b-t.h*.42)+'" r="'+w*.38+'" fill="#d98a2b"/>';continue}
-   out+='<rect x="'+(x-5)+'" y="'+(b-t.h*.1)+'" width="10" height="'+t.h*.12+'" fill="#3a281c"/>';
-   for(let k=0;k<5;k++){const ty=b-t.h*.08-k*t.h*.19,tw=w*(1-k*.17);out+='<path d="M'+x+' '+(ty-t.h*.32)+'L'+(x+tw)+' '+ty+'L'+(x-tw)+' '+ty+'Z" fill="'+t.c+'"/>'}}
+  for(const t of items){const w=t.h*.34,x=t.x,b=t.base;
+   if(t.am){const c=t.c2?'#c9782b':'#a8481f';out+='<rect x="'+(x-4)+'" y="'+(b-t.h*.45)+'" width="8" height="'+t.h*.45+'" fill="#4a2f20"/><circle cx="'+x+'" cy="'+(b-t.h*.55)+'" r="'+w*.5+'" fill="'+c+'"/><circle cx="'+(x-w*.32)+'" cy="'+(b-t.h*.44)+'" r="'+w*.34+'" fill="'+c+'"/><circle cx="'+(x+w*.32)+'" cy="'+(b-t.h*.46)+'" r="'+w*.34+'" fill="#d98a2b"/>';continue}
+   out+='<rect x="'+(x-4)+'" y="'+(b-t.h*.1)+'" width="8" height="'+t.h*.12+'" fill="#3a281c"/>';
+   for(let k=0;k<5;k++){const ty=b-t.h*.08-k*t.h*.18,tw=w*(1-k*.17);out+='<path d="M'+x+' '+(ty-t.h*.3)+'L'+(x+tw)+' '+ty+'L'+(x-tw)+' '+ty+'Z" fill="'+t.c+'"/>'}}
   svg.innerHTML=out}
- trees($('svgL'),20,860,300,560,['#1c382b','#244a37','#2f5a43','#173125'],.14);
- trees($('svgR'),20,860,300,560,['#1c382b','#244a37','#2f5a43','#173125'],.14);
- trees($('vsvg'),22,260,120,230,['#1c382b','#2f5a43'],.1);
+ function buildTrees(){const vh=innerHeight,pw=Math.max(240,innerWidth*.62),P=['#1c382b','#244a37','#2f5a43','#173125'];
+  trees($('svgL'),pw,vh,Math.round(pw/34),.8,.28,.5,P,.14);trees($('svgR'),pw,vh,Math.round(pw/34),.8,.28,.5,P,.14);
+  const v=$('vbg'),vw=v.offsetWidth||innerWidth;trees($('vsvg'),vw,260,Math.round(vw/30),.6,.25,.5,['#1c382b','#2f5a43'],.1)}
+ buildTrees();let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(buildTrees,200)});
  const couple=[...$('couple').querySelectorAll('path,circle')];couple.forEach(p=>{p.setAttribute('pathLength','1');p.style.strokeDasharray='1';p.style.strokeDashoffset=rm?'0':'1'});
  if(!rm){const lv=$('leaves'),cols=['#c9582a','#d98a2b','#a8481f','#e0a03a','#8c3d1c'];for(let i=0;i<16;i++){const l=document.createElement('span');l.className='leaf';l.style.left=Math.random()*100+'%';l.style.background=cols[i%cols.length];l.style.animationDuration=(12+Math.random()*12)+'s';l.style.animationDelay=(-Math.random()*24)+'s';l.style.width=l.style.height=(10+Math.random()*10)+'px';lv.appendChild(l)}}
  document.querySelectorAll('.reveal').forEach(sec=>{[...sec.children].forEach((c,i)=>c.style.setProperty('--i',i));sec.querySelectorAll('.card,.timeline>div').forEach((c,i)=>c.style.setProperty('--i',i+2))});
