@@ -204,7 +204,7 @@ function tick(){const d=new Date(C.dateISO)-new Date();if(d<0){$('count').innerH
  [...$('count').children].forEach((el,i)=>{const b=el.firstChild,t=String(v[i]);if(b.textContent!==t){b.textContent=t;b.classList.remove('flip');void b.offsetWidth;b.classList.add('flip')}})}
 tick();setInterval(tick,1000);
 document.querySelectorAll('[data-to]').forEach(a=>a.onclick=()=>$(a.dataset.to).scrollIntoView({behavior:'smooth'}));
-const nav=$('nav');addEventListener('scroll',()=>nav.classList.toggle('show',scrollY>window.innerHeight*.9),{passive:true});
+const nav=$('nav');addEventListener('scroll',()=>nav.classList.toggle('show',scrollY>document.getElementById('hero').offsetHeight-window.innerHeight*.6),{passive:true});
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 $('q').addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(search,300)});
@@ -227,9 +227,9 @@ $('step2').addEventListener('submit',e=>{e.preventDefault();$('err').hidden=true
 (function(){
  const rm=matchMedia('(prefers-reduced-motion:reduce)').matches,NS='http://www.w3.org/2000/svg';
  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
- function trees(svg,W,H,n,top,minH,maxH,palette,amberChance){
+ function trees(svg,W,H,n,top,minH,maxH,palette,amberChance,x0,x1){
   seed=7;svg.setAttribute('viewBox','0 0 '+W+' '+H);
-  const items=[];for(let i=0;i<n;i++){const h=H*(minH+rnd()*(maxH-minH)),base=H*(top+rnd()*.14);items.push({x:rnd()*W,h,base,c:palette[Math.floor(rnd()*palette.length)],am:rnd()<amberChance,c2:rnd()<.5})}
+  const items=[];for(let i=0;i<n;i++){const h=H*(minH+rnd()*(maxH-minH)),base=H*(top+rnd()*.14);items.push({x:x0+rnd()*(x1-x0),h,base,c:palette[Math.floor(rnd()*palette.length)],am:rnd()<amberChance,c2:rnd()<.5})}
   items.sort((a,b)=>a.base-b.base);let out='';
   for(const t of items){const w=t.h*.34,x=t.x,b=t.base;
    if(t.am){const c=t.c2?'#c9782b':'#a8481f';out+='<rect x="'+(x-4)+'" y="'+(b-t.h*.45)+'" width="8" height="'+t.h*.45+'" fill="#4a2f20"/><circle cx="'+x+'" cy="'+(b-t.h*.55)+'" r="'+w*.5+'" fill="'+c+'"/><circle cx="'+(x-w*.32)+'" cy="'+(b-t.h*.44)+'" r="'+w*.34+'" fill="'+c+'"/><circle cx="'+(x+w*.32)+'" cy="'+(b-t.h*.46)+'" r="'+w*.34+'" fill="#d98a2b"/>';continue}
@@ -237,8 +237,8 @@ $('step2').addEventListener('submit',e=>{e.preventDefault();$('err').hidden=true
    for(let k=0;k<5;k++){const ty=b-t.h*.08-k*t.h*.18,tw=w*(1-k*.17);out+='<path d="M'+x+' '+(ty-t.h*.3)+'L'+(x+tw)+' '+ty+'L'+(x-tw)+' '+ty+'Z" fill="'+t.c+'"/>'}}
   svg.innerHTML=out}
  function buildTrees(){const vh=innerHeight,pw=Math.max(240,innerWidth*.62),P=['#1c382b','#244a37','#2f5a43','#173125'];
-  trees($('svgL'),pw,vh,Math.round(pw/34),.8,.28,.5,P,.14);trees($('svgR'),pw,vh,Math.round(pw/34),.8,.28,.5,P,.14);
-  const v=$('vbg'),vw=v.offsetWidth||innerWidth;trees($('vsvg'),vw,260,Math.round(vw/30),.6,.25,.5,['#1c382b','#2f5a43'],.1)}
+  trees($('svgL'),pw,vh,Math.round(pw/34),.8,.28,.5,P,.14,-20,pw-70);trees($('svgR'),pw,vh,Math.round(pw/34),.8,.28,.5,P,.14,70,pw+20);
+  const v=$('vbg'),vw=v.offsetWidth||innerWidth;trees($('vsvg'),vw,260,Math.round(vw/30),.6,.25,.5,['#1c382b','#2f5a43'],.1,0,vw)}
  buildTrees();let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(buildTrees,200)});
  const couple=[...$('couple').querySelectorAll('path,circle')];couple.forEach(p=>{p.setAttribute('pathLength','1');p.style.strokeDasharray='1';p.style.strokeDashoffset=rm?'0':'1'});
  if(!rm){const lv=$('leaves'),cols=['#c9582a','#d98a2b','#a8481f','#e0a03a','#8c3d1c'];for(let i=0;i<16;i++){const l=document.createElement('span');l.className='leaf';l.style.left=Math.random()*100+'%';l.style.background=cols[i%cols.length];l.style.animationDuration=(12+Math.random()*12)+'s';l.style.animationDelay=(-Math.random()*24)+'s';l.style.width=l.style.height=(10+Math.random()*10)+'px';lv.appendChild(l)}}
