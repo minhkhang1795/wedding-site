@@ -79,8 +79,11 @@ body{font-weight:300}h1,h2,h3{letter-spacing:-.02em}.script{font-family:'Cormora
 .curtain-valance{position:absolute;z-index:3;left:-2%;right:-2%;top:-1px;height:13vh;min-height:72px;background:linear-gradient(180deg,#092522 0%,#17443f 64%,#0a302d 68%,#9b7440 71%,#d7b477 74%,#6b4e2e 78%,transparent 82%);border-radius:0 0 48% 48%/0 0 18% 18%;box-shadow:0 10px 16px #04191770}
 .curtain-tie{position:absolute;z-index:2;top:54%;width:4px;height:12vh;background:linear-gradient(90deg,#49321a,#f1d394,#6c4b25);border-radius:50%;opacity:0;box-shadow:0 0 8px #d5b36a}
 .curtain-tie.left{left:3.4%}.curtain-tie.right{right:3.4%}
-.curtain-overlay .curtain-left{animation:curtain-draw-left var(--curtain-time) cubic-bezier(.65,0,.25,1) both}.curtain-overlay .curtain-right{animation:curtain-draw-right var(--curtain-time) cubic-bezier(.65,0,.25,1) both}.curtain-overlay .curtain-tie{animation:curtain-tie-in var(--curtain-time) ease both}
+.curtain-overlay .curtain-left{animation:curtain-draw-left var(--curtain-time) cubic-bezier(.65,0,.25,1) both;animation:curtain-draw-left var(--curtain-time) cubic-bezier(.65,0,.25,1) both;-webkit-animation:curtain-draw-left var(--curtain-time) cubic-bezier(.65,0,.25,1) both}.curtain-overlay .curtain-right{animation:curtain-draw-right var(--curtain-time) cubic-bezier(.65,0,.25,1) both;-webkit-animation:curtain-draw-right var(--curtain-time) cubic-bezier(.65,0,.25,1) both}.curtain-overlay .curtain-tie{animation:curtain-tie-in var(--curtain-time) ease both;-webkit-animation:curtain-tie-in var(--curtain-time) ease both}
 @keyframes curtain-auto-hide{0%,99%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
+@-webkit-keyframes curtain-draw-left{0%{-webkit-transform:scaleX(1) translateX(0)}48%{-webkit-transform:scaleX(.62) translateX(-15%)}72%{-webkit-transform:scaleX(.28) translateX(-50%)}100%{-webkit-transform:scaleX(.16) translateX(-100%)}}
+@-webkit-keyframes curtain-draw-right{0%{-webkit-transform:scaleX(1) translateX(0)}48%{-webkit-transform:scaleX(.62) translateX(15%)}72%{-webkit-transform:scaleX(.28) translateX(50%)}100%{-webkit-transform:scaleX(.16) translateX(100%)}}
+@-webkit-keyframes curtain-tie-in{0%,52%{opacity:0;-webkit-transform:scaleY(.1)}68%,100%{opacity:.92;-webkit-transform:scaleY(1)}}
 @keyframes curtain-draw-left{0%{transform:scaleX(1) translateX(0)}48%{transform:scaleX(.62) translateX(-15%)}72%{transform:scaleX(.28) translateX(-50%)}100%{transform:scaleX(.16) translateX(-100%)}}
 @keyframes curtain-draw-right{0%{transform:scaleX(1) translateX(0)}48%{transform:scaleX(.62) translateX(15%)}72%{transform:scaleX(.28) translateX(50%)}100%{transform:scaleX(.16) translateX(100%)}}
 @keyframes curtain-tie-in{0%,52%{opacity:0;transform:scaleY(.1)}68%,100%{opacity:.92;transform:scaleY(1)}}
@@ -217,7 +220,7 @@ function startCurtain(){if(reduced||!curtain||curtainStarted)return;curtainStart
  setTimeout(()=>{if(curtain.isConnected)curtain.remove()},6500);
 }
 if(!reduced&&curtain){
- startCurtain();addEventListener('pageshow',startCurtain,{once:true});
+ startCurtain();setTimeout(()=>{if(curtain.isConnected)curtain.remove()},6500);addEventListener('pageshow',startCurtain,{once:true});
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)startCurtain()});
  curtain.addEventListener('pointerdown',startCurtain,{once:true});curtain.addEventListener('touchstart',startCurtain,{once:true,passive:true});
 }
