@@ -491,15 +491,30 @@ $("step2").addEventListener("submit", (e) => {
       '<svg viewBox="0 0 24 30" aria-hidden="true"><path d="M12 28 4 18l7 3-6-8 7 3-4-8 4 4 1-9 2 9 5-5-3 9 5-3-6 8 6-2-8 9Z" fill="currentColor"/><path d="M12 28V5" stroke="#f7f4ed" stroke-opacity=".7" stroke-width=".8"/></svg>';
     const cone =
       '<svg viewBox="0 0 20 28" aria-hidden="true"><defs><linearGradient id="coneShade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9a8050"/><stop offset=".48" stop-color="#735b37"/><stop offset="1" stop-color="#51432e"/></linearGradient></defs><path d="M10 1C7 3 5 5 4 8 2 11 2 15 3 19c1 4 3 7 7 9 4-2 6-5 7-9 1-4 1-8-1-11-1-3-3-5-6-7Z" fill="url(#coneShade)" stroke="#51432e" stroke-width=".65"/><g fill="none" stroke="#d3bf92" stroke-opacity=".82" stroke-width=".7" stroke-linecap="round"><path d="M7 5c1.4 1.1 2.3 2.4 3 4 .8-1.6 1.7-2.9 3-4M4.5 9c2.2.5 4 1.8 5.5 3.8 1.5-2 3.3-3.3 5.5-3.8M3.2 14c2.7.2 5 1.5 6.8 3.7 1.8-2.2 4.1-3.5 6.8-3.7M3.8 19c2.5-.1 4.6 1.1 6.2 3.2 1.6-2.1 3.7-3.3 6.2-3.2M6.5 23c1.3-.2 2.5.2 3.5 1.2 1-1 2.2-1.4 3.5-1.2"/></g><path d="M10 1 8.7 4.8" fill="none" stroke="#51432e" stroke-width=".9"/></svg>';
+    const rnd = (min, max) => min + Math.random() * (max - min);
     for (let i = 0; i < 8; i++) {
       const item = document.createElement("span");
       const isCone = i % 3 === 0;
       item.className = "pinefall-item " + (isCone ? "cone" : "needle");
       item.innerHTML = isCone ? cone : needle;
-      item.style.left = 6 + Math.random() * 88 + "%";
-      item.style.animationDuration = 20 + Math.random() * 14 + "s";
-      item.style.animationDelay = -Math.random() * 30 + "s";
-      item.style.transform = "rotate(" + Math.random() * 360 + "deg)";
+      const st = item.style;
+      st.left = rnd(4, 92) + "%";
+      // Per-piece fall time: some drop in ~10s, others float for ~40s. Cones are heavier.
+      st.animationDuration = (isCone ? rnd(9, 22) : rnd(12, 42)) + "s";
+      st.animationDelay = -rnd(0, 40) + "s";
+      // Each piece gets its own sideways path (a different wander at every stage).
+      const reach = rnd(35, 110);
+      const bias = rnd(-90, 90);
+      for (let k = 0; k < 6; k++) st.setProperty("--x" + k, bias * (k / 5) + (Math.random() < 0.5 ? -1 : 1) * rnd(0.4, 1) * reach + "px");
+      // Uneven vertical progress and rotation, spinning either way, some barely turning.
+      st.setProperty("--y1", rnd(12, 26) + "vh");
+      st.setProperty("--y2", rnd(30, 46) + "vh");
+      st.setProperty("--y3", rnd(54, 68) + "vh");
+      st.setProperty("--y4", rnd(76, 90) + "vh");
+      const spin = (Math.random() < 0.5 ? -1 : 1) * rnd(120, 640);
+      for (let k = 0; k < 6; k++) st.setProperty("--r" + k, rnd(0, 360) + spin * (k / 5) + "deg");
+      st.setProperty("--s", rnd(0.75, 1.25));
+      st.setProperty("--o", rnd(0.4, 0.58));
       layer.appendChild(item);
     }
   }
