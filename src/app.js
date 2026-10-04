@@ -75,7 +75,6 @@ window.WEDDING = {
     navDetails: "Details",
     navVenue: "Venue",
     navRsvp: "RSVP",
-    heroTagline: "Together with their families",
     heroButton: "RSVP",
     storyEyebrow: "Save the date",
     detailsEyebrow: "The celebration",
@@ -95,7 +94,8 @@ window.WEDDING = {
     countLabel: "How many in your party? (Including you)",
     emailLabel: "Email address",
     emailPlaceholder: "Your email address",
-    notesLabel: "Dietary needs or a note (optional)",
+    notesLabel: "Dietary needs (optional)",
+    coupleNoteLabel: "Note to the couple (optional)",
     send: "Send RSVP",
     back: "Not you? Search again",
     thanksTitle: "Thank you",
@@ -114,7 +114,6 @@ for (const id of [
   "navDetails",
   "navVenue",
   "navRsvp",
-  "heroTagline",
   "heroButton",
   "storyEyebrow",
   "detailsEyebrow",
@@ -129,6 +128,7 @@ for (const id of [
   "countLabel",
   "emailLabel",
   "notesLabel",
+  "coupleNoteLabel",
   "send",
   "back",
   "thanksTitle",
@@ -137,6 +137,7 @@ for (const id of [
   $(id).textContent = T[id];
 }
 $("already").textContent = T.already;
+$("coupleNoteAcceptedLabel").textContent = T.coupleNoteLabel;
 $("map").textContent = T.mapLink;
 $("q").placeholder = T.searchPlaceholder;
 $("email").placeholder = T.emailPlaceholder;
@@ -288,20 +289,29 @@ function pick(g) {
   show("step2");
   $("who").textContent = g.name;
   $("already").hidden = !g.responded;
+  document.querySelector('[name=att][value="yes"]').checked = true;
   $("cnt").innerHTML = Array.from(
     { length: g.max },
     (_, i) => "<option>" + (i + 1) + "</option>",
   ).join("");
   $("cnt").value = g.max;
+  $("acceptFields").hidden = false;
+  $("declineFields").hidden = true;
+  $("email").required = true;
   $("cntwrap").hidden = false;
+  $("email").value = "";
+  $("notes").value = "";
+  $("coupleNote").value = "";
+  $("coupleNoteAccepted").value = "";
 }
-document.querySelectorAll("[name=att]").forEach(
-  (r) =>
-    (r.onchange = () => {
-      $("cntwrap").hidden =
-        document.querySelector("[name=att]:checked").value === "no";
-    }),
-);
+document.querySelectorAll("[name=att]").forEach((r) => {
+  r.onchange = () => {
+    const declined = r.value === "no" && r.checked;
+    $("acceptFields").hidden = declined;
+    $("declineFields").hidden = !declined;
+    $("email").required = !declined;
+  };
+});
 $("back").onclick = () => show("step1");
 $("step2").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -322,6 +332,9 @@ $("step2").addEventListener("submit", (e) => {
       count: $("cnt").value,
       email: $("email").value,
       notes: $("notes").value,
+      coupleNote: document.querySelector("[name=att]:checked").value === "no"
+        ? $("coupleNote").value
+        : $("coupleNoteAccepted").value,
     }),
   })
     .then((r) => r.json())

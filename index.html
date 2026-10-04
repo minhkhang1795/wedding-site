@@ -1025,6 +1025,38 @@ footer .script {
   letter-spacing: 0.005em;
   color: var(--pine);
 }
+
+
+/* Tablet layouts need a stacked gallery heading and a single-column venue. */
+@media (min-width: 701px) and (max-width: 1200px) {
+  .gallery-heading {
+    display: block;
+    text-align: center;
+  }
+  .gallery-heading h2 {
+    white-space: normal;
+  }
+  .gallery-heading p {
+    width: 100%;
+    max-width: 36rem;
+    margin: 1rem auto 0;
+  }
+  .venue-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+  .venue-image {
+    height: clamp(20rem, 58vw, 35rem);
+  }
+  #venue .venue-layout > div > .sect-flora {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .venue-layout .orn {
+    justify-content: center;
+  }
+}
     </style>
   </head>
   <body>
@@ -1044,7 +1076,6 @@ footer .script {
           /></picture>
         </div>
         <div class="hero-copy" id="heroCopy">
-          <p class="script" id="heroTagline"></p>
           <h1 id="names"></h1>
           <p class="date" id="date"></p>
           <p class="place" id="place"></p>
@@ -1184,14 +1215,28 @@ footer .script {
               <span id="declineText"></span
             ></label>
           </div>
-          <div id="cntwrap">
-            <label for="cnt" id="countLabel"></label
-            ><select id="cnt"></select>
+          <div id="acceptFields">
+            <div id="cntwrap">
+              <label for="cnt" id="countLabel"></label
+              ><select id="cnt"></select>
+            </div>
+            <div id="emailwrap">
+              <label for="email" id="emailLabel"></label
+              ><input id="email" type="email" />
+            </div>
+            <div id="dietwrap">
+              <label for="notes" id="notesLabel"></label
+              ><textarea id="notes" rows="3"></textarea>
+            </div>
+            <div id="acceptedCoupleNote">
+              <label for="coupleNoteAccepted" id="coupleNoteAcceptedLabel"></label
+              ><textarea id="coupleNoteAccepted" rows="3"></textarea>
+            </div>
           </div>
-          <label for="email" id="emailLabel"></label
-          ><input id="email" type="email" required />
-          <label for="notes" id="notesLabel"></label
-          ><textarea id="notes" rows="3"></textarea>
+          <div id="declineFields" hidden>
+            <label for="coupleNote" id="coupleNoteLabel"></label
+            ><textarea id="coupleNote" rows="3"></textarea>
+          </div>
           <div style="text-align: center">
             <button class="btn fill" type="submit" id="send"></button
             ><br /><button
@@ -1290,7 +1335,6 @@ window.WEDDING = {
     navDetails: "Details",
     navVenue: "Venue",
     navRsvp: "RSVP",
-    heroTagline: "Together with their families",
     heroButton: "RSVP",
     storyEyebrow: "Save the date",
     detailsEyebrow: "The celebration",
@@ -1310,7 +1354,8 @@ window.WEDDING = {
     countLabel: "How many in your party? (Including you)",
     emailLabel: "Email address",
     emailPlaceholder: "Your email address",
-    notesLabel: "Dietary needs or a note (optional)",
+    notesLabel: "Dietary needs (optional)",
+    coupleNoteLabel: "Note to the couple (optional)",
     send: "Send RSVP",
     back: "Not you? Search again",
     thanksTitle: "Thank you",
@@ -1329,7 +1374,6 @@ for (const id of [
   "navDetails",
   "navVenue",
   "navRsvp",
-  "heroTagline",
   "heroButton",
   "storyEyebrow",
   "detailsEyebrow",
@@ -1344,6 +1388,7 @@ for (const id of [
   "countLabel",
   "emailLabel",
   "notesLabel",
+  "coupleNoteLabel",
   "send",
   "back",
   "thanksTitle",
@@ -1352,6 +1397,7 @@ for (const id of [
   $(id).textContent = T[id];
 }
 $("already").textContent = T.already;
+$("coupleNoteAcceptedLabel").textContent = T.coupleNoteLabel;
 $("map").textContent = T.mapLink;
 $("q").placeholder = T.searchPlaceholder;
 $("email").placeholder = T.emailPlaceholder;
@@ -1503,20 +1549,29 @@ function pick(g) {
   show("step2");
   $("who").textContent = g.name;
   $("already").hidden = !g.responded;
+  document.querySelector('[name=att][value="yes"]').checked = true;
   $("cnt").innerHTML = Array.from(
     { length: g.max },
     (_, i) => "<option>" + (i + 1) + "</option>",
   ).join("");
   $("cnt").value = g.max;
+  $("acceptFields").hidden = false;
+  $("declineFields").hidden = true;
+  $("email").required = true;
   $("cntwrap").hidden = false;
+  $("email").value = "";
+  $("notes").value = "";
+  $("coupleNote").value = "";
+  $("coupleNoteAccepted").value = "";
 }
-document.querySelectorAll("[name=att]").forEach(
-  (r) =>
-    (r.onchange = () => {
-      $("cntwrap").hidden =
-        document.querySelector("[name=att]:checked").value === "no";
-    }),
-);
+document.querySelectorAll("[name=att]").forEach((r) => {
+  r.onchange = () => {
+    const declined = r.value === "no" && r.checked;
+    $("acceptFields").hidden = declined;
+    $("declineFields").hidden = !declined;
+    $("email").required = !declined;
+  };
+});
 $("back").onclick = () => show("step1");
 $("step2").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -1537,6 +1592,9 @@ $("step2").addEventListener("submit", (e) => {
       count: $("cnt").value,
       email: $("email").value,
       notes: $("notes").value,
+      coupleNote: document.querySelector("[name=att]:checked").value === "no"
+        ? $("coupleNote").value
+        : $("coupleNoteAccepted").value,
     }),
   })
     .then((r) => r.json())

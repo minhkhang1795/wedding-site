@@ -1007,3 +1007,35 @@ footer .script {
   letter-spacing: 0.005em;
   color: var(--pine);
 }
+
+
+/* Tablet layouts need a stacked gallery heading and a single-column venue. */
+@media (min-width: 701px) and (max-width: 1200px) {
+  .gallery-heading {
+    display: block;
+    text-align: center;
+  }
+  .gallery-heading h2 {
+    white-space: normal;
+  }
+  .gallery-heading p {
+    width: 100%;
+    max-width: 36rem;
+    margin: 1rem auto 0;
+  }
+  .venue-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+  .venue-image {
+    height: clamp(20rem, 58vw, 35rem);
+  }
+  #venue .venue-layout > div > .sect-flora {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .venue-layout .orn {
+    justify-content: center;
+  }
+}

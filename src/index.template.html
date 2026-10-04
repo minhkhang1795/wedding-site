@@ -36,7 +36,6 @@
           /></picture>
         </div>
         <div class="hero-copy" id="heroCopy">
-          <p class="script" id="heroTagline"></p>
           <h1 id="names"></h1>
           <p class="date" id="date"></p>
           <p class="place" id="place"></p>
@@ -176,14 +175,28 @@
               <span id="declineText"></span
             ></label>
           </div>
-          <div id="cntwrap">
-            <label for="cnt" id="countLabel"></label
-            ><select id="cnt"></select>
+          <div id="acceptFields">
+            <div id="cntwrap">
+              <label for="cnt" id="countLabel"></label
+              ><select id="cnt"></select>
+            </div>
+            <div id="emailwrap">
+              <label for="email" id="emailLabel"></label
+              ><input id="email" type="email" />
+            </div>
+            <div id="dietwrap">
+              <label for="notes" id="notesLabel"></label
+              ><textarea id="notes" rows="3"></textarea>
+            </div>
+            <div id="acceptedCoupleNote">
+              <label for="coupleNoteAccepted" id="coupleNoteAcceptedLabel"></label
+              ><textarea id="coupleNoteAccepted" rows="3"></textarea>
+            </div>
           </div>
-          <label for="email" id="emailLabel"></label
-          ><input id="email" type="email" required />
-          <label for="notes" id="notesLabel"></label
-          ><textarea id="notes" rows="3"></textarea>
+          <div id="declineFields" hidden>
+            <label for="coupleNote" id="coupleNoteLabel"></label
+            ><textarea id="coupleNote" rows="3"></textarea>
+          </div>
           <div style="text-align: center">
             <button class="btn fill" type="submit" id="send"></button
             ><br /><button
