@@ -1354,6 +1354,7 @@ window.WEDDING = {
     rsvpTitle: "RSVP",
     searchLabel: "Search your name",
     searchPlaceholder: "Type your first or last name",
+    minSearchLength: "Please enter at least 3 characters to search.",
     noMatch: "No match. Try just your first or last name, or contact us below.",
     serverError: "Could not reach the server. Please try again.",
     welcomePrefix: "Welcome,",
@@ -1533,6 +1534,14 @@ const io = new IntersectionObserver(
 document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 $("q").addEventListener("input", () => {
   clearTimeout(timer);
+  const query = $("q").value.trim();
+  if (query.length < 3) {
+    $("results").innerHTML = "";
+    $("none").textContent = query.length ? T.minSearchLength : "";
+    $("none").hidden = query.length === 0;
+    return;
+  }
+  $("none").hidden = true;
   timer = setTimeout(search, 300);
 });
 const API = window.WEDDING.apiUrl;
@@ -1540,7 +1549,11 @@ function search() {
   const q = $("q").value.trim();
   $("none").hidden = true;
   $("results").innerHTML = "";
-  if (q.length < 3) return;
+  if (q.length < 3) {
+    $("none").textContent = q.length ? T.minSearchLength : "";
+    $("none").hidden = q.length === 0;
+    return;
+  }
   fetch(API + "?action=search&q=" + encodeURIComponent(q))
     .then((r) => r.json())
     .then((r) => {
