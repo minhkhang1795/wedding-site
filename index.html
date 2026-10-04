@@ -73,9 +73,7 @@ body{font-weight:300}h1,h2,h3{letter-spacing:-.02em}.script{font-family:'Cormora
 @keyframes pinefall-drift{0%{transform:translate3d(0,-10vh,0) rotate(0deg)}25%{transform:translate3d(28px,24vh,0) rotate(75deg)}50%{transform:translate3d(-20px,52vh,0) rotate(170deg)}75%{transform:translate3d(28px,78vh,0) rotate(255deg)}100%{transform:translate3d(-8px,112vh,0) rotate(360deg)}}
 
 @media(max-width:700px){.venue-layout{grid-template-columns:1fr;gap:2rem;text-align:center}.venue-image{height:350px}.venue-layout .orn{justify-content:center}.gallery-heading{display:block;text-align:center}.gallery-heading h2{white-space:nowrap;font-size:clamp(2rem,9vw,3.2rem)}.gallery-heading p{width:100%;max-width:none;margin:1rem auto 0}}
-.date-treatment.type-a{margin:2rem auto 1.25rem;max-width:520px;text-align:center}.type-a .date-weekday{display:block;font:400 .7rem Jost,sans-serif;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}.type-a .date-line{display:block;font:400 clamp(2.2rem,7vw,3.25rem)/1.05 "Cormorant Garamond",serif;letter-spacing:.005em;color:var(--pine)}
-.type-a-rsvp{margin:0 auto 1rem;text-align:center}.type-a-rsvp span{display:block;font:.62rem Jost,sans-serif;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}.type-a-rsvp b{display:block;font:400 1.45rem "Cormorant Garamond",serif;color:var(--pine)}
-@media(max-width:700px){.rsvp-date{margin-bottom:.8rem}}
+.timeline-note{margin:1.25rem auto 0;font-size:.72rem;letter-spacing:.12em;color:var(--sage);opacity:.82}.date-treatment.type-a{margin:2rem auto 1.25rem;max-width:520px;text-align:center}.type-a .date-weekday{display:block;font:400 .7rem Jost,sans-serif;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}.type-a .date-line{display:block;font:400 clamp(2.2rem,7vw,3.25rem)/1.05 "Cormorant Garamond",serif;letter-spacing:.005em;color:var(--pine)}
 </style></head><body>
 <div class="pinefall" id="pinefall" aria-hidden="true"></div>
 <nav id="nav"><a data-to="story" id="navStory"></a><a data-to="details" id="navDetails"></a><a data-to="venue" id="navVenue"></a><a data-to="rsvp" id="navRsvp"></a></nav>
@@ -89,12 +87,11 @@ body{font-weight:300}h1,h2,h3{letter-spacing:-.02em}.script{font-family:'Cormora
  <div class="count" id="count"></div></section>
 <section class="gallery reveal" id="photos"><div class="gallery-heading"><div><p class="eyebrow" id="galleryEyebrow"></p><h2 id="galleryTitle"></h2></div><p id="galleryText"></p></div><div class="photo-grid" id="photoGrid"></div></section><div class="band"><section id="details" class="reveal"><svg class="sect-flora" viewBox="0 0 90 40" aria-hidden="true"><path d="M4 20H35M55 20H86"/><path d="M45 5L38 13H42L35 20H41L33 28H57L49 20H55L48 13H52Z M45 28V35"/></svg><p class="eyebrow" id="detailsEyebrow"></p><h2 id="detailsTitle"></h2>
  <div class="cards" id="cards"></div>
- <div class="timeline" id="timeline"></div></section></div>
+ <div class="timeline" id="timeline"></div><p class="timeline-note">Times are approximate - final schedule coming soon</p></section></div>
 <section id="venue" class="reveal"><div class="venue-layout"><img class="venue-image" id="venuePhoto" loading="lazy" decoding="async" alt=""><div><svg class="sect-flora" viewBox="0 0 90 40" aria-hidden="true"><path d="M4 20H35M55 20H86"/><path d="M45 5L38 13H42L35 20H41L33 28H57L49 20H55L48 13H52Z M45 28V35"/></svg><p class="eyebrow" id="venueEyebrow"></p><h2 id="vname"></h2><div class="orn"><svg class="orn-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 3.5c1.3 2.5 1.3 4.1 0 5.2-1.3-1.1-1.3-2.7 0-5.2ZM20.5 12c-2.5 1.3-4.1 1.3-5.2 0 1.1-1.3 2.7-1.3 5.2 0ZM12 20.5c-1.3-2.5-1.3-4.1 0-5.2 1.3 1.1 1.3 2.7 0 5.2ZM3.5 12c2.5-1.3 4.1-1.3 5.2 0-1.1 1.3-2.7 1.3-5.2 0ZM5.99 5.99c2.8.4 4 1.2 4.5 2.7-1.5.5-2.3-.8-4.5-2.7ZM18.01 5.99c-.4 2.8-1.2 4-2.7 4.5-.5-1.5.8-2.3 2.7-4.5ZM18.01 18.01c-2.8-.4-4-1.2-4.5-2.7 1.5-.5 2.3.8 4.5 2.7ZM5.99 18.01c.4-2.8 1.2-4 2.7-4.5.5 1.5-.8 2.3-2.7 4.5Z"/><circle cx="12" cy="12" r="1.2"/></g></svg></div>
  <p id="vtext"></p><p><a class="link" id="map" target="_blank" rel="noopener"></a></p>
  <div class="cards" id="travel"></div></div></div></section>
-<section id="rsvp" class="rsvp reveal"><svg class="sect-flora" viewBox="0 0 90 40" aria-hidden="true"><path d="M4 20H35M55 20H86"/><path d="M45 5L38 13H42L35 20H41L33 28H57L49 20H55L48 13H52Z M45 28V35"/></svg><p class="eyebrow" id="rsvpEyebrow"></p><h2 id="rsvpTitle"></h2><p class="rsvp-date type-a-rsvp"><span>Wedding date</span><b>Saturday, April 3, 2027</b></p>
- <div class="panel">
+<section id="rsvp" class="rsvp reveal"><svg class="sect-flora" viewBox="0 0 90 40" aria-hidden="true"><path d="M4 20H35M55 20H86"/><path d="M45 5L38 13H42L35 20H41L33 28H57L49 20H55L48 13H52Z M45 28V35"/></svg><p class="eyebrow" id="rsvpEyebrow"></p><h2 id="rsvpTitle"></h2> <div class="panel">
   <div id="step1" class="step"><label for="q" id="searchLabel" style="margin-top:0"></label>
    <input id="q" type="search" autocomplete="off">
    <ul id="results"></ul><p id="none" class="small" hidden></p></div>
@@ -146,7 +143,7 @@ window.WEDDING={
   serverError:"Could not reach the server. Please try again.", welcomePrefix:"Welcome,",
   already:"You already replied. Submitting again will update your answer.",
   acceptText:"Joyfully accepts", declineText:"Regretfully declines",
-  countLabel:"Guests attending (including you)", emailLabel:"Email address", emailPlaceholder:"Your email address",
+  countLabel:"How many in your party? (Including you)", emailLabel:"Email address", emailPlaceholder:"Your email address",
   notesLabel:"Dietary needs or a note (optional)", send:"Send RSVP", back:"Not you? Search again",
   thanksTitle:"Thank you", thanksText:"Your RSVP is in. We'll email you the details soon.",
   genericError:"Something went wrong: ", countUnits:["Days","Hours","Minutes","Seconds"]
