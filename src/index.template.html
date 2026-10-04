@@ -168,14 +168,30 @@
             <span id="welcomePrefix"></span> <span id="who"></span>
           </p>
           <p class="small" id="already" hidden></p>
-          <div class="choice" style="margin-top: 1rem">
-            <label
-              ><input type="radio" name="att" value="yes" checked />
-              <span id="acceptText"></span></label
-            ><label
-              ><input type="radio" name="att" value="no" />
-              <span id="declineText"></span
-            ></label>
+          <div class="evt">
+            <p class="evt-title" id="mainEvtTitle"></p>
+            <div class="choice">
+              <label
+                ><input type="radio" name="att" value="yes" checked />
+                <span id="acceptText"></span></label
+              ><label
+                ><input type="radio" name="att" value="no" />
+                <span id="declineText"></span
+              ></label>
+            </div>
+          </div>
+          <div class="evt" id="teaBlock" hidden>
+            <p class="evt-title" id="teaEvtTitle"></p>
+            <p class="small" id="teaEvtText"></p>
+            <div class="choice">
+              <label
+                ><input type="radio" name="tea" value="yes" checked />
+                <span id="teaAcceptText"></span></label
+              ><label
+                ><input type="radio" name="tea" value="no" />
+                <span id="teaDeclineText"></span
+              ></label>
+            </div>
           </div>
           <div id="acceptFields">
             <div id="cntwrap">
@@ -224,3 +240,4 @@
     </script>
   </body>
 </html>
+

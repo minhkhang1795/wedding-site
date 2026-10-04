@@ -1039,3 +1039,8 @@ footer .script {
     justify-content: center;
   }
 }
+
+
+.evt { margin-top: 1rem; }
+.evt-title { font: 600 .8rem "Jost", sans-serif; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 .4rem; opacity: .75; }
+#teaBlock { margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,.12); }

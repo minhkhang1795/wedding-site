@@ -2,7 +2,7 @@
 // Keep the API URL as-is unless the Apps Script deployment URL changes.
 window.WEDDING = {
   apiUrl:
-    "https://script.google.com/macros/s/AKfycbxiy6zhKInn70xzM6M52AmYpQTrusa5lkmekYNRXVZiiMkWH3vZ8o8x7EJg3uUCIhsd/exec",
+    "https://script.google.com/macros/s/AKfycbw29Sh-Uqw31rU8mwZ-7PmOrVCsTaWNuMl0gNX-m8q-5qcHf9vTOBkMmxqW7-w-Qz77/exec",
   names: ["Khang", "Thuy"],
   dateLine: "Saturday, April 3, 2027",
   dateISO: "2027-04-03T16:00:00+07:00",
@@ -99,6 +99,11 @@ window.WEDDING = {
     already: "You already replied. Submitting again will update your answer.",
     acceptText: "Joyfully accepts",
     declineText: "Regretfully declines",
+    mainEvtTitle: "Wedding Ceremony - April 3, 2027",
+    teaEvtTitle: "Tea Ceremony - March 27, 2027",
+    teaEvtText: "You are also invited to our tea ceremony.",
+    teaAcceptText: "Joyfully accepts the tea ceremony",
+    teaDeclineText: "Regretfully declines the tea ceremony",
     countLabel: "How many in your party? (Including you)",
     emailLabel: "Email address",
     emailPlaceholder: "Your email address",
@@ -133,6 +138,11 @@ for (const id of [
   "welcomePrefix",
   "acceptText",
   "declineText",
+  "mainEvtTitle",
+  "teaEvtTitle",
+  "teaEvtText",
+  "teaAcceptText",
+  "teaDeclineText",
   "countLabel",
   "emailLabel",
   "notesLabel",
@@ -319,6 +329,8 @@ function pick(g) {
   $("who").textContent = g.name;
   $("already").hidden = !g.responded;
   document.querySelector('[name=att][value="yes"]').checked = true;
+  document.querySelector('[name=tea][value="yes"]').checked = true;
+  $("teaBlock").hidden = !g.teaInvited;
   $("cnt").innerHTML = Array.from(
     { length: g.max },
     (_, i) => "<option>" + (i + 1) + "</option>",
@@ -333,14 +345,19 @@ function pick(g) {
   $("coupleNote").value = "";
   $("coupleNoteAccepted").value = "";
 }
-document.querySelectorAll("[name=att]").forEach((r) => {
-  r.onchange = () => {
-    const declined = r.value === "no" && r.checked;
-    $("acceptFields").hidden = declined;
-    $("declineFields").hidden = !declined;
-    $("email").required = !declined;
-  };
-});
+function val(n) {
+  return document.querySelector("[name=" + n + "]:checked").value;
+}
+function syncFields() {
+  const any =
+    val("att") === "yes" || (sel && sel.teaInvited && val("tea") === "yes");
+  $("acceptFields").hidden = !any;
+  $("declineFields").hidden = any;
+  $("email").required = any;
+}
+document
+  .querySelectorAll("[name=att],[name=tea]")
+  .forEach((r) => (r.onchange = syncFields));
 $("back").onclick = () => show("step1");
 $("step2").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -357,11 +374,13 @@ $("step2").addEventListener("submit", (e) => {
     body: JSON.stringify({
       id: sel.id,
       name: sel.name,
-      attending: document.querySelector("[name=att]:checked").value,
+      attending: val("att"),
+      mainAttending: val("att"),
+      teaAttending: sel.teaInvited ? val("tea") : "",
       count: $("cnt").value,
       email: $("email").value,
       notes: $("notes").value,
-      coupleNote: document.querySelector("[name=att]:checked").value === "no"
+      coupleNote: $("acceptFields").hidden
         ? $("coupleNote").value
         : $("coupleNoteAccepted").value,
     }),
@@ -432,3 +451,4 @@ $("step2").addEventListener("submit", (e) => {
   addEventListener("resize", timelineFrame);
   timelineFrame();
 })();
+
