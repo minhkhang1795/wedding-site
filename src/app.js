@@ -2,7 +2,7 @@
 // Keep the API URL as-is unless the Apps Script deployment URL changes.
 window.WEDDING = {
   apiUrl:
-    "https://script.google.com/macros/s/AKfycbw29Sh-Uqw31rU8mwZ-7PmOrVCsTaWNuMl0gNX-m8q-5qcHf9vTOBkMmxqW7-w-Qz77/exec",
+    "https://script.google.com/macros/s/AKfycbyIdDyzH8Nyv4CQg1KA6-XMgDD2A9DZ-WEdhjv0WZy-MPAX29WxzlE9777IsQfEkHZf/exec",
   names: ["Khang", "Thuy"],
   dateLine: "Saturday, April 3, 2027",
   dateISO: "2027-04-03T16:00:00+07:00",
@@ -104,6 +104,12 @@ window.WEDDING = {
     teaEvtText: "You are also invited to our tea ceremony.",
     teaAcceptText: "Joyfully accepts the tea ceremony",
     teaDeclineText: "Regretfully declines the tea ceremony",
+    unlockIntro: "You already replied. Enter the email you used to open and edit your reply.",
+    unlockLabel: "Email address",
+    unlockHint: "Hint:",
+    unlockBtn: "Open my reply",
+    unlockBack: "Not you? Search again",
+    unlockChecking: "Checking...",
     countLabel: "How many in your party? (Including you)",
     emailLabel: "Email address",
     emailPlaceholder: "Your email address",
@@ -138,6 +144,10 @@ for (const id of [
   "welcomePrefix",
   "acceptText",
   "declineText",
+  "unlockIntro",
+  "unlockLabel",
+  "unlockBtn",
+  "unlockBack",
   "mainEvtTitle",
   "teaEvtTitle",
   "teaEvtText",
@@ -321,10 +331,33 @@ function search() {
     });
 }
 function show(id) {
-  ["step1", "step2", "done"].forEach((s) => ($(s).hidden = s !== id));
+  ["step1", "stepUnlock", "step2", "done"].forEach((s) => ($(s).hidden = s !== id));
 }
 function pick(g) {
   sel = g;
+  sel.verifyEmail = "";
+  if (!g.responded) return openForm(g, null);
+  // Already replied: ask the backend whether an email is on file, and for a masked hint.
+  fetch(API + "?action=hint&id=" + encodeURIComponent(g.id) + "&name=" + encodeURIComponent(g.name))
+    .then((r) => r.json())
+    .then((r) => {
+      if (!r.ok) throw new Error(r.error || "error");
+      if (!r.hasEmail) return openForm(g, null);
+      $("unlockWho").textContent = T.welcomePrefix + " " + g.name;
+      $("unlockHint").textContent = T.unlockHint + " " + r.hint;
+      $("unlockEmail").value = "";
+      $("unlockErr").hidden = true;
+      $("unlockBtn").disabled = false;
+      $("unlockBtn").textContent = T.unlockBtn;
+      show("stepUnlock");
+    })
+    .catch(() => {
+      show("step1");
+      $("none").textContent = T.serverError;
+      $("none").hidden = false;
+    });
+}
+function openForm(g, v) {
   show("step2");
   $("who").textContent = g.name;
   $("already").hidden = !g.responded;
@@ -344,7 +377,43 @@ function pick(g) {
   $("notes").value = "";
   $("coupleNote").value = "";
   $("coupleNoteAccepted").value = "";
+  if (v) {
+    document.querySelector('[name=att][value="' + v.attending + '"]').checked = true;
+    if (g.teaInvited && v.teaAttending)
+      document.querySelector('[name=tea][value="' + v.teaAttending + '"]').checked = true;
+    $("cnt").value = String(Math.min(Math.max(Number(v.count) || 1, 1), g.max));
+    $("email").value = v.email;
+    $("notes").value = v.notes;
+    $("coupleNote").value = v.coupleNote;
+    $("coupleNoteAccepted").value = v.coupleNote;
+  }
+  syncFields();
 }
+$("unlockBack").onclick = () => show("step1");
+$("stepUnlock").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = $("unlockEmail").value.trim();
+  $("unlockErr").hidden = true;
+  $("unlockBtn").disabled = true;
+  $("unlockBtn").textContent = T.unlockChecking;
+  fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ action: "unlock", id: sel.id, name: sel.name, email }),
+  })
+    .then((r) => r.json())
+    .then((r) => {
+      if (!r.ok) throw new Error(r.error);
+      sel.verifyEmail = email;
+      openForm(sel, r.values || null);
+    })
+    .catch((x) => {
+      $("unlockErr").textContent = x.message || T.serverError;
+      $("unlockErr").hidden = false;
+      $("unlockBtn").disabled = false;
+      $("unlockBtn").textContent = T.unlockBtn;
+    });
+});
 function val(n) {
   return document.querySelector("[name=" + n + "]:checked").value;
 }
@@ -374,6 +443,7 @@ $("step2").addEventListener("submit", (e) => {
     body: JSON.stringify({
       id: sel.id,
       name: sel.name,
+      verifyEmail: sel.verifyEmail || "",
       attending: val("att"),
       mainAttending: val("att"),
       teaAttending: sel.teaInvited ? val("tea") : "",

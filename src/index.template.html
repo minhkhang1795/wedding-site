@@ -156,6 +156,31 @@
           <ul id="results"></ul>
           <p id="none" class="small" hidden></p>
         </div>
+        <form id="stepUnlock" class="step" hidden>
+          <p
+            style="
+              font:
+                400 1.6rem &quot;Cormorant Garamond&quot;,
+                serif;
+              margin: 0;
+            "
+          >
+            <span id="unlockWho"></span>
+          </p>
+          <p class="small" id="unlockIntro"></p>
+          <label for="unlockEmail" id="unlockLabel"></label
+          ><input id="unlockEmail" type="email" autocomplete="off" required />
+          <p class="small" id="unlockHint"></p>
+          <div style="text-align: center">
+            <button class="btn fill" type="submit" id="unlockBtn"></button
+            ><br /><button
+              type="button"
+              class="linkbtn small"
+              id="unlockBack"
+            ></button>
+          </div>
+          <p class="err" id="unlockErr" hidden></p>
+        </form>
         <form id="step2" class="step" hidden>
           <p
             style="
