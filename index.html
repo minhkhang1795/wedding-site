@@ -1663,6 +1663,16 @@ $("q").addEventListener("input", () => {
   timer = setTimeout(search, 300);
 });
 const API = window.WEDDING.apiUrl;
+// Wake the Apps Script backend while the guest reads, so the first search is not a cold start.
+let lastWarm = 0;
+function warm() {
+  const now = Date.now();
+  if (now - lastWarm < 60000) return;
+  lastWarm = now;
+  fetch(API + "?action=ping", { mode: "no-cors" }).catch(() => {});
+}
+warm();
+$("q").addEventListener("focus", warm);
 function search() {
   const q = $("q").value.trim();
   $("none").hidden = true;
@@ -1693,14 +1703,21 @@ function search() {
 function show(id) {
   ["step1", "stepUnlock", "step2", "done"].forEach((s) => ($(s).hidden = s !== id));
 }
+let picking = false;
 function pick(g) {
   sel = g;
   sel.verifyEmail = "";
   if (!g.responded) return openForm(g, null);
+  if (picking) return;
+  picking = true;
+  $("none").textContent = T.unlockChecking;
+  $("none").hidden = false;
   // Already replied: ask the backend whether an email is on file, and for a masked hint.
   fetch(API + "?action=hint&id=" + encodeURIComponent(g.id) + "&name=" + encodeURIComponent(g.name))
     .then((r) => r.json())
     .then((r) => {
+      picking = false;
+      $("none").hidden = true;
       if (!r.ok) throw new Error(r.error || "error");
       if (!r.hasEmail) return openForm(g, null);
       $("unlockWho").textContent = T.welcomePrefix + " " + g.name;
@@ -1712,6 +1729,7 @@ function pick(g) {
       show("stepUnlock");
     })
     .catch(() => {
+      picking = false;
       show("step1");
       $("none").textContent = T.serverError;
       $("none").hidden = false;
