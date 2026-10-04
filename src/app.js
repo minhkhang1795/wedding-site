@@ -164,6 +164,7 @@ for (const id of [
 ]) {
   $(id).textContent = T[id];
 }
+$("venueEyebrowTop").textContent = T.venueEyebrow;
 $("already").textContent = T.already;
 $("coupleNoteAcceptedLabel").textContent = T.coupleNoteLabel;
 $("map").textContent = T.mapLink;
@@ -521,4 +522,5 @@ $("step2").addEventListener("submit", (e) => {
   addEventListener("resize", timelineFrame);
   timelineFrame();
 })();
+
 

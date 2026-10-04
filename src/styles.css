@@ -1044,3 +1044,35 @@ footer .script {
 .evt { margin-top: 1rem; }
 .evt-title { font: 600 .8rem "Jost", sans-serif; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 .4rem; opacity: .75; }
 #teaBlock { margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,.12); }
+
+
+/* Desktop: stacked, centered gallery heading; tree + WHERE in a page-centered row above the venue. */
+.venue-head {
+  display: none;
+}
+@media (min-width: 901px) {
+  .gallery-heading {
+    display: block;
+    text-align: center;
+  }
+  .gallery-heading h2 {
+    white-space: nowrap;
+  }
+  .gallery-heading p {
+    max-width: none;
+    margin: 1rem auto 0;
+  }
+  .venue-head {
+    display: block;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .venue-head .sect-flora {
+    display: block;
+    margin: 0 auto;
+  }
+  .venue-layout .sect-flora,
+  .venue-layout .eyebrow {
+    display: none;
+  }
+}

@@ -1074,6 +1074,38 @@ footer .script {
 .evt { margin-top: 1rem; }
 .evt-title { font: 600 .8rem "Jost", sans-serif; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 .4rem; opacity: .75; }
 #teaBlock { margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,.12); }
+
+
+/* Desktop: stacked, centered gallery heading; tree + WHERE in a page-centered row above the venue. */
+.venue-head {
+  display: none;
+}
+@media (min-width: 901px) {
+  .gallery-heading {
+    display: block;
+    text-align: center;
+  }
+  .gallery-heading h2 {
+    white-space: nowrap;
+  }
+  .gallery-heading p {
+    max-width: none;
+    margin: 1rem auto 0;
+  }
+  .venue-head {
+    display: block;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .venue-head .sect-flora {
+    display: block;
+    margin: 0 auto;
+  }
+  .venue-layout .sect-flora,
+  .venue-layout .eyebrow {
+    display: none;
+  }
+}
     </style>
   </head>
   <body>
@@ -1157,6 +1189,15 @@ footer .script {
       </section>
     </div>
     <section id="venue" class="reveal">
+      <div class="venue-head">
+        <svg class="sect-flora" viewBox="0 0 90 40" aria-hidden="true">
+          <path d="M4 20H35M55 20H86" />
+          <path
+            d="M45 5L38 13H42L35 20H41L33 28H57L49 20H55L48 13H52Z M45 28V35"
+          />
+        </svg>
+        <p class="eyebrow" id="venueEyebrowTop"></p>
+      </div>
       <div class="venue-layout">
         <img
           class="venue-image"
@@ -1482,6 +1523,7 @@ for (const id of [
 ]) {
   $(id).textContent = T[id];
 }
+$("venueEyebrowTop").textContent = T.venueEyebrow;
 $("already").textContent = T.already;
 $("coupleNoteAcceptedLabel").textContent = T.coupleNoteLabel;
 $("map").textContent = T.mapLink;
@@ -1842,4 +1884,5 @@ $("step2").addEventListener("submit", (e) => {
     </script>
   </body>
 </html>
+
 
