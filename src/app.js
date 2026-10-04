@@ -36,33 +36,40 @@ window.WEDDING = {
   // PHOTO SLOTS: replace these URLs or replace the matching assets files.
   // heroDesktop = wide smiling portrait; heroMobile = full-length vertical portrait.
   photos: {
-    heroDesktop: "assets/03.svg",
-    heroMobile: "assets/04.svg",
-    venue: "assets/villa.jpg",
+    heroDesktop: "assets/optimized/03.webp",
+    heroMobile: "assets/optimized/04.webp",
+    heroDesktopLarge: "assets/optimized/03-1600.webp",
+    heroMobileLarge: "assets/optimized/04-1200.webp",
+    venue: "assets/optimized/villa-960.webp",
+    venueLarge: "assets/optimized/villa-1440.webp",
     gallery: [
       {
-        src: "assets/01.svg",
+        src: "assets/optimized/01.webp",
+        srcset: "assets/optimized/01.webp 1000w, assets/optimized/01-1680.webp 1680w",
         alt: "Khang and Thuy embracing beside a garden pond",
-        width: 1680,
-        height: 1120,
+        width: 1000,
+        height: 667,
       },
       {
-        src: "assets/02.svg",
+        src: "assets/optimized/02.webp",
+        srcset: "assets/optimized/02.webp 900w, assets/optimized/02-1399.webp 1399w",
         alt: "Khang and Thuy holding hands outside the NYC subway",
-        width: 1400,
-        height: 2100,
+        width: 900,
+        height: 1351,
       },
       {
-        src: "assets/03.svg",
+        src: "assets/optimized/03.webp",
+        srcset: "assets/optimized/03.webp 1100w, assets/optimized/03-1600.webp 1600w",
         alt: "Khang and Thuy smiling beside a teal NYC doorway",
-        width: 1680,
-        height: 1120,
+        width: 1100,
+        height: 733,
       },
       {
-        src: "assets/04.svg",
+        src: "assets/optimized/04.webp",
+        srcset: "assets/optimized/04.webp 1000w, assets/optimized/04-1200.webp 1200w",
         alt: "Khang and Thuy in wedding attire, bouquet raised",
-        width: 1400,
-        height: 2100,
+        width: 1000,
+        height: 1501,
       },
     ],
   },
@@ -174,16 +181,25 @@ $("travel").innerHTML = C.travel
   )
   .join("");
 $("heroPhoto").src = C.photos.heroDesktop;
+$("heroPhoto").srcset =
+  C.photos.heroDesktop + " 1100w, " + C.photos.heroDesktopLarge + " 1600w";
+$("heroPhoto").sizes = "100vw";
 $("heroPhoto").alt = C.photos.gallery[2].alt;
-$("heroMobile").srcset = C.photos.heroMobile;
+$("heroMobile").srcset =
+  C.photos.heroMobile + " 1000w, " + C.photos.heroMobileLarge + " 1200w";
 $("venuePhoto").src = C.photos.venue;
+$("venuePhoto").srcset =
+  C.photos.venue + " 960w, " + C.photos.venueLarge + " 1440w";
+$("venuePhoto").sizes = "(max-width: 700px) 100vw, 48vw";
 $("venuePhoto").alt = "Ana Mandara Villas Dalat Resort beneath the pine hills";
 $("photoGrid").innerHTML = C.photos.gallery
   .map(
     (p) =>
       '<figure><img src="' +
       p.src +
-      '" alt="' +
+      '" srcset="' +
+      p.srcset +
+      '" sizes="(max-width: 700px) 48vw, 25vw" alt="' +
       p.alt +
       '" width="' +
       p.width +
