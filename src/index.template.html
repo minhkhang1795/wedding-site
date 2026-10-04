@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Wedding</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Cpath d=%22M32 5 18 25h8L12 40h14v17h12V40h14L38 25h8z%22 fill=%22%23123d38%22/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Great+Vibes&family=Jost:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      __BUILD_INLINE_STYLES__
+    </style>
+  </head>
+  <body>
+    <div class="pinefall" id="pinefall" aria-hidden="true"></div>
+    <nav id="nav">
+      <a data-to="story" id="navStory"></a
+      ><a data-to="details" id="navDetails"></a
+      ><a data-to="venue" id="navVenue"></a><a data-to="rsvp" id="navRsvp"></a>
+    </nav>
+    <div class="progress" id="prog"></div>
+    <header class="hero" id="hero">
+      <div class="stick">
+        <div class="hero-photo">
+          <picture
+            ><source id="heroMobile" media="(max-width:700px)" />
+            <img id="heroPhoto" fetchpriority="high" decoding="async" alt=""
+          /></picture>
+        </div>
+        <div class="hero-copy" id="heroCopy">
+          <p class="script" id="heroTagline"></p>
+          <h1 id="names"></h1>
+          <p class="date" id="date"></p>
+          <p class="place" id="place"></p>
+          <button class="btn" data-to="rsvp" id="heroButton"></button>
+        </div>
+      </div>
+    </header>
+    <section id="story" class="reveal">
+      <svg class="sect-flora" viewBox="0 0 90 40" aria-hidden="true">
+        <path d="M4 20H35M55 20H86" />
+        <path
+          d="M45 5L38 13H42L35 20H41L33 28H57L49 20H55L48 13H52Z M45 28V35"
+        />
+      </svg>
+      <p class="eyebrow" id="storyEyebrow"></p>
+      <h2 id="headline"></h2>
+      <div class="date-treatment type-a" aria-label="Wedding date">
+        <span class="date-weekday">Saturday</span
+        ><span class="date-line">April 3, 2027</span>
+      </div>
+      <div class="orn">
+        <svg
+          class="orn-icon"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M12 21s-8-4.35-8-10.1A4.9 4.9 0 0 1 12 7.2a4.9 4.9 0 0 1 8 3.7C20 16.65 12 21 12 21Z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
+      <p id="intro"></p>
+      <div class="count" id="count"></div>
+    </section>
+    <section class="gallery reveal" id="photos">
+      <div class="gallery-heading">
+        <div>
+          <p class="eyebrow" id="galleryEyebrow"></p>
+          <h2 id="galleryTitle"></h2>
+        </div>
+        <p id="galleryText"></p>
+      </div>
+      <div class="photo-grid" id="photoGrid"></div>
+    </section>
+    <div class="band">
+      <section id="details" class="reveal">
+        <svg class="sect-flora" viewBox="0 0 90 40" aria-hidden="true">
+          <path d="M4 20H35M55 20H86" />
+          <path
+            d="M45 5L38 13H42L35 20H41L33 28H57L49 20H55L48 13H52Z M45 28V35"
+          />
+        </svg>
+        <p class="eyebrow" id="detailsEyebrow"></p>
+        <h2 id="detailsTitle"></h2>
+        <div class="cards" id="cards"></div>
+        <div class="timeline" id="timeline"></div>
+        <p class="timeline-note">
+          Times are approximate - final schedule coming soon
+        </p>
+      </section>
+    </div>
+    <section id="venue" class="reveal">
+      <div class="venue-layout">
+        <img
+          class="venue-image"
+          id="venuePhoto"
+          loading="lazy"
+          decoding="async"
+          alt=""
+        />
+        <div>
+          <svg class="sect-flora" viewBox="0 0 90 40" aria-hidden="true">
+            <path d="M4 20H35M55 20H86" />
+            <path
+              d="M45 5L38 13H42L35 20H41L33 28H57L49 20H55L48 13H52Z M45 28V35"
+            />
+          </svg>
+          <p class="eyebrow" id="venueEyebrow"></p>
+          <h2 id="vname"></h2>
+          <div class="orn">
+            <svg
+              class="orn-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <g fill="none" stroke="currentColor" stroke-width="1.2">
+                <path
+                  d="M12 3.5c1.3 2.5 1.3 4.1 0 5.2-1.3-1.1-1.3-2.7 0-5.2ZM20.5 12c-2.5 1.3-4.1 1.3-5.2 0 1.1-1.3 2.7-1.3 5.2 0ZM12 20.5c-1.3-2.5-1.3-4.1 0-5.2 1.3 1.1 1.3 2.7 0 5.2ZM3.5 12c2.5-1.3 4.1-1.3 5.2 0-1.1 1.3-2.7 1.3-5.2 0ZM5.99 5.99c2.8.4 4 1.2 4.5 2.7-1.5.5-2.3-.8-4.5-2.7ZM18.01 5.99c-.4 2.8-1.2 4-2.7 4.5-.5-1.5.8-2.3 2.7-4.5ZM18.01 18.01c-2.8-.4-4-1.2-4.5-2.7 1.5-.5 2.3.8 4.5 2.7ZM5.99 18.01c.4-2.8 1.2-4 2.7-4.5.5 1.5-.8 2.3-2.7 4.5Z"
+                />
+                <circle cx="12" cy="12" r="1.2" />
+              </g>
+            </svg>
+          </div>
+          <p id="vtext"></p>
+          <p><a class="link" id="map" target="_blank" rel="noopener"></a></p>
+          <div class="cards" id="travel"></div>
+        </div>
+      </div>
+    </section>
+    <section id="rsvp" class="rsvp reveal">
+      <svg class="sect-flora" viewBox="0 0 90 40" aria-hidden="true">
+        <path d="M4 20H35M55 20H86" />
+        <path
+          d="M45 5L38 13H42L35 20H41L33 28H57L49 20H55L48 13H52Z M45 28V35"
+        />
+      </svg>
+      <p class="eyebrow" id="rsvpEyebrow"></p>
+      <h2 id="rsvpTitle"></h2>
+      <div class="panel">
+        <div id="step1" class="step">
+          <label for="q" id="searchLabel" style="margin-top: 0"></label>
+          <input id="q" type="search" autocomplete="off" />
+          <ul id="results"></ul>
+          <p id="none" class="small" hidden></p>
+        </div>
+        <form id="step2" class="step" hidden>
+          <p
+            style="
+              font:
+                400 1.6rem &quot;Cormorant Garamond&quot;,
+                serif;
+              margin: 0;
+            "
+          >
+            <span id="welcomePrefix"></span> <span id="who"></span>
+          </p>
+          <p class="small" id="already" hidden></p>
+          <div class="choice" style="margin-top: 1rem">
+            <label
+              ><input type="radio" name="att" value="yes" checked />
+              <span id="acceptText"></span></label
+            ><label
+              ><input type="radio" name="att" value="no" />
+              <span id="declineText"></span
+            ></label>
+          </div>
+          <div id="cntwrap">
+            <label for="cnt" id="countLabel"></label
+            ><select id="cnt"></select>
+          </div>
+          <label for="email" id="emailLabel"></label
+          ><input id="email" type="email" required />
+          <label for="notes" id="notesLabel"></label
+          ><textarea id="notes" rows="3"></textarea>
+          <div style="text-align: center">
+            <button class="btn fill" type="submit" id="send"></button
+            ><br /><button
+              type="button"
+              class="linkbtn small"
+              id="back"
+            ></button>
+          </div>
+          <p class="err" id="err" hidden></p>
+        </form>
+        <div id="done" class="step done" hidden>
+          <h3 id="thanksTitle"></h3>
+          <p id="thanksText"></p>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <p class="script" id="fnames"></p>
+      <p class="small" id="contact"></p>
+    </footer>
+    <script>
+      __BUILD_INLINE_SCRIPT__;
+    </script>
+  </body>
+</html>
