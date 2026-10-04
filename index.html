@@ -1774,7 +1774,8 @@ function openForm(g, v) {
   $("acceptFields").hidden = false;
   $("declineFields").hidden = true;
   $("email").required = true;
-  $("cntwrap").hidden = false;
+  // One-person invites have nothing to choose: hide the party size field (the value stays 1).
+  $("cntwrap").hidden = g.max <= 1;
   $("email").value = "";
   $("notes").value = "";
   $("coupleNote").value = "";
