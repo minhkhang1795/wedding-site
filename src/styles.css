@@ -921,6 +921,9 @@ footer .script {
   color: #345e57;
 }
 .pinefall-item.needle {
+  animation-name: pinefall-drift-leaf;
+  animation-timing-function: linear;
+  opacity: 0.52;
   width: 22px;
   height: 28px;
 }
@@ -947,6 +950,24 @@ footer .script {
   }
   100% {
     transform: translate3d(var(--x5, 0px), 112vh, 0) rotate(var(--r5, 360deg)) scale(var(--s, 1));
+  }
+}
+
+@keyframes pinefall-drift-leaf {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(28px, 24vh, 0) rotate(75deg);
+  }
+  50% {
+    transform: translate3d(-20px, 52vh, 0) rotate(170deg);
+  }
+  75% {
+    transform: translate3d(28px, 78vh, 0) rotate(255deg);
+  }
+  100% {
+    transform: translate3d(-8px, 112vh, 0) rotate(360deg);
   }
 }
 

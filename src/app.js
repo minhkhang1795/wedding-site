@@ -498,6 +498,14 @@ $("step2").addEventListener("submit", (e) => {
       item.className = "pinefall-item " + (isCone ? "cone" : "needle");
       item.innerHTML = isCone ? cone : needle;
       const st = item.style;
+      if (!isCone) {
+        // Leaves keep the original gentle drift: small fixed sway (see pinefall-drift-leaf), 20-34s falls.
+        st.left = 6 + Math.random() * 88 + "%";
+        st.animationDuration = 20 + Math.random() * 14 + "s";
+        st.animationDelay = -Math.random() * 30 + "s";
+        layer.appendChild(item);
+        continue;
+      }
       st.left = rnd(4, 92) + "%";
       // Per-piece fall time: some drop in ~10s, others float for ~40s. Cones are heavier.
       st.animationDuration = (isCone ? rnd(9, 22) : rnd(12, 42)) + "s";
