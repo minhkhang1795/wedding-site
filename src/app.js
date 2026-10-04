@@ -262,7 +262,7 @@ function search() {
   const q = $("q").value.trim();
   $("none").hidden = true;
   $("results").innerHTML = "";
-  if (q.length < 2) return;
+  if (q.length < 3) return;
   fetch(API + "?action=search&q=" + encodeURIComponent(q))
     .then((r) => r.json())
     .then((r) => {
