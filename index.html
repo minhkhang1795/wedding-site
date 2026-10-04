@@ -72,7 +72,7 @@ body{font-weight:300}h1,h2,h3{letter-spacing:-.02em}.script{font-family:'Cormora
 .pinefall{position:fixed;inset:0;z-index:2;overflow:hidden;pointer-events:none}.pinefall-item{position:absolute;top:-12vh;opacity:.52;will-change:transform;animation:pinefall-drift linear infinite;color:#345e57}.pinefall-item.needle{width:22px;height:28px}.pinefall-item.cone{width:17px;height:25px;color:#735b37}
 @keyframes pinefall-drift{0%{transform:translate3d(0,-10vh,0) rotate(0deg)}25%{transform:translate3d(28px,24vh,0) rotate(75deg)}50%{transform:translate3d(-20px,52vh,0) rotate(170deg)}75%{transform:translate3d(28px,78vh,0) rotate(255deg)}100%{transform:translate3d(-8px,112vh,0) rotate(360deg)}}
 
-@media(max-width:700px){.venue-layout{grid-template-columns:1fr;gap:2rem;text-align:center}.venue-image{height:350px}.venue-layout .orn{justify-content:center}}
+@media(max-width:700px){.venue-layout{grid-template-columns:1fr;gap:2rem;text-align:center}.venue-image{height:350px}.venue-layout .orn{justify-content:center}.gallery-heading{display:block;text-align:center}.gallery-heading h2{white-space:nowrap;font-size:clamp(2rem,9vw,3.2rem)}.gallery-heading p{width:100%;max-width:none;margin:1rem auto 0}}
 </style></head><body>
 <div class="pinefall" id="pinefall" aria-hidden="true"></div>
 <nav id="nav"><a data-to="story" id="navStory"></a><a data-to="details" id="navDetails"></a><a data-to="venue" id="navVenue"></a><a data-to="rsvp" id="navRsvp"></a></nav>
